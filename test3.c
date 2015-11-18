@@ -16,13 +16,16 @@ int main(void) /* C89 ANSI */
     }  
     /* if can't open the file for read
        then print an error message and return false to the environment */
-     
+             int arraylen = sizeof(word)/sizeof(word[0]);
     n = 0; /* turn the counter of words to zero */
     word[0] = '\0'; /* turn the word array to an empty state */
-    while ((r = fscanf(fp, "\n%9[^ 0-9\n\t.,!-]%*c", word)) == 1) {
+    while ((r = fscanf(fp, "\n%9[^ 0-9\n\t\r\v\f!#$&'()*+,./:;<=>?@_`{|}~-]%*c", word)) == 1) {
+            for(i=0;i<arraylen;i++)
+                printf("%c\n",word[i]);
 
-        int arraylen = sizeof(word)/sizeof(word[0]);
-        if((r = fscanf(fp, "%[0-9]]%*c", word)) == 0) {
+
+
+        if((r = fscanf(fp, "\n%[0-9]]%*c", word)) == 0) {
             for(i=0;i<arraylen;i++)
                 printf("%c\n",word[i]);
         }

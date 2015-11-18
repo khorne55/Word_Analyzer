@@ -5,10 +5,10 @@
 int main(void) /* C89 ANSI */
 {
     FILE *fp;
-    int r,n; /* a variable for result of a function, returning int */
+    int r,n,i; /* a variable for result of a function, returning int */
      /* the words counter */
     const char *filename = "test2.txt"; /* a file name opening for read */
-    char word[10]; /* an array for the check if a non-empty word was read */
+    char word[100]; /* an array for the check if a non-empty word was read */
      
     if ((fp = fopen(filename, "r")) == NULL) {
         fprintf(stderr, "error: file" "\n");
@@ -16,10 +16,24 @@ int main(void) /* C89 ANSI */
     }  
     /* if can't open the file for read
        then print an error message and return false to the environment */
-     
+    int arraylen = sizeof(word)/sizeof(word[0]); /*write the length of array word to arraylen*/ 
     n = 0; /* turn the counter of words to zero */
     word[0] = '\0'; /* turn the word array to an empty state */
-    while ((r = fscanf(fp, "\n%9[^ 0-9\n!\"#$%%&'()*+,./:;<=>?@_`{|}~-]%*c", word)) == 1) {
+   while ((r = fscanf(fp, "\n%*9[A-Za-z]", word)) == 1) {
+        printf("firstoutput\n");
+        for(i=0;i<arraylen;i++)
+          
+                printf("%c",word[i]);
+
+    
+    if((r = fscanf(fp, "\n%[^A-Za-z]%*c", word)) == 0) { /*in case next character is not a 
+        letter do nothing, this is in place to prevent the program from getting stuck*/
+
+         printf("secondoutput\n");
+        for(i=0;i<arraylen;i++)
+            if(word[i] != (' '))
+                printf("%c",word[i]);
+        }
 
         if (word[0] != '\0')
             n++;
@@ -43,9 +57,9 @@ int main(void) /* C89 ANSI */
        and return false to the environment */
      
     if (n == 1) /* control "to be" and endings for word or words */
-        printf("there is %d word" "\n", n);
+        printf("\nthere is %d word" "\n", n);
     else
-        printf("there are %d words" "\n", n);
+        printf("\nthere are %d words" "\n", n);
      
     fclose(fp); /* close the file */
      

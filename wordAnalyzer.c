@@ -15,22 +15,27 @@ The aim of this module is to perform various operations on a text file.
 #include <stdlib.h>
 #include <stdio.h>
 
+#define WORD "A-Za-z"
 
 int countWords(FILE *f){
+   char ch[100][100];
    int count = 0;
-   char ch;
-   while ((ch = fgetc(f)) != EOF){
-       if ((ch == ' ') || (ch=='\n'))
-           count++;
-   }
+       while (fscanf(f, "%[^" WORD "]",ch[count]) != EOF
+        && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) {
+        count++;
+        puts(ch[count-1]);
+    }
+    puts(ch[7]);
+
    return count;
 }
 
 int main(void){
 
    int wordCount = 0;
-   FILE *rFile = fopen("test.txt", "r");
+   FILE *rFile = fopen("test2.txt", "r");
    wordCount += countWords(rFile);
    printf("%d\n", wordCount);
    return 0;
 }
+
