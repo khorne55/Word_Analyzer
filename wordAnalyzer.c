@@ -17,52 +17,67 @@ The aim of this module is to perform various operations on a text file.
 #include <string.h>
 
 #define WORD "A-Za-z"
+#define width 100
+#define height 10000
 
-void hello(int*a,int* b) {
-*a=2;
-*b=3;
-(*a)++;
-a++;
-}
 
-int countWords(FILE *f,int* now){
-   char ch[100][100];
+int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
    int x;
+
    *now=0;
    int count = 0;
        while (fscanf(f, "%[^" WORD "]",ch[count]) != EOF
-        && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) {
+        && fscanf(f, "%10[" WORD "]", ch[count]) != EOF) {
 
         if(count>0) {
 
         for(x=0;x<count;x++) {
 
-          if((strcasecmp(ch[count],ch[x]))==0) {
+          if(instances[x]==0) {
+            instances[x]=1;
+          }
+
+          if((strcasecmp(ch[count],ch[x]))==0) { /* Compare if the two words match, 
+          case insensitive*/
             if(fscanf(f, "%[^" WORD "]",ch[count]) != EOF
-            && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) 
+            && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) /* Since the words match,
+            now we have to overwrite the double word by scanning the next set of characters.*/
               printf("String is equal\n");
+              printf("%d",x);
+              instances[x]++;
+            
               (*now)++;
           }
         }
       }
-        puts(ch[count]);
+
         count++;
         (*now)++;
     }
-    puts(ch[13]);
     printf("%d\n",*now );
+    printf("%d\n",instances[0] );
+
+
 
    return count;
 }
 
 int main(void){
 
-   int uniquewordCount=0,wordCount=0;
-   FILE *rFile = fopen("test2.txt", "r");
-   uniquewordCount += countWords(rFile,&wordCount);
-   int a,b;
-   hello(&a,&b);
-   printf("%d\n",(a+b));
+   int uniquewordCount=0,wordCount=0,i;
+   char ch[height][width];
+   int instances[height];
+   FILE *rFile = fopen("test6.txt", "r");
+   uniquewordCount += countWords(rFile,&wordCount,ch,instances);
+
+
+
+   for(i=0;i<uniquewordCount-1;i++){
+      printf("x %d ",instances[i] );
+    puts(ch[i]);
+   
+
+   }
    printf("Amount of unique words: %d\n", uniquewordCount);
    printf("Amount of words: %d\n", wordCount);
    return 0;
