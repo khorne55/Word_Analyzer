@@ -28,8 +28,9 @@ int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
    int count = 0;
        while (fscanf(f, "%[^" WORD "]",ch[count]) != EOF
         && fscanf(f, "%10[" WORD "]", ch[count]) != EOF) {
+        printf("%d\n",count );
 
-        if(count>0) {
+  
 
         for(x=0;x<count;x++) {
 
@@ -37,25 +38,29 @@ int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
             instances[x]=1;
           }
 
-          if((strcasecmp(ch[count],ch[x]))==0) { /* Compare if the two words match, 
+          if((strcasecmp(ch[count],ch[count-1]))==0) {
+              count--;
+              instances[count]++;
+          }
+          else if((strcasecmp(ch[count],ch[x]))==0) { /* Compare if the two words match, 
           case insensitive*/
+        
             if(fscanf(f, "%[^" WORD "]",ch[count]) != EOF
             && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) /* Since the words match,
             now we have to overwrite the double word by scanning the next set of characters.*/
-              printf("String is equal\n");
-              printf("%d",x);
+
+
               instances[x]++;
             
               (*now)++;
           }
         }
-      }
+      
 
         count++;
         (*now)++;
     }
-    printf("%d\n",*now );
-    printf("%d\n",instances[0] );
+
 
 
 
@@ -72,7 +77,7 @@ int main(void){
 
 
 
-   for(i=0;i<uniquewordCount-1;i++){
+   for(i=0;i<uniquewordCount;i++){
       printf("x %d ",instances[i] );
     puts(ch[i]);
    
