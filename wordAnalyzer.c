@@ -30,7 +30,6 @@ int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
         && fscanf(f, "%10[" WORD "]", ch[count]) != EOF) {
         printf("%d\n",count );
 
-  
 
         for(x=0;x<count;x++) {
 
@@ -38,17 +37,18 @@ int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
             instances[x]=1;
           }
 
-          if((strcasecmp(ch[count],ch[count-1]))==0) {
-              count--;
-              instances[count]++;
-          }
-          else if((strcasecmp(ch[count],ch[x]))==0) { /* Compare if the two words match, 
+
+          if((strcasecmp(ch[count],ch[x]))==0) { /* Compare if the two words match, 
           case insensitive*/
         
             if(fscanf(f, "%[^" WORD "]",ch[count]) != EOF
             && fscanf(f, "%10[" WORD "]",ch[count]) != EOF) /* Since the words match,
             now we have to overwrite the double word by scanning the next set of characters.*/
+		
+		if((strcasecmp(ch[count-1],ch[x]))==0) {
+			count--;
 
+		}
 
               instances[x]++;
             
@@ -56,11 +56,10 @@ int countWords(FILE *f,int* now,char ch[height][width],int instances[height]){
           }
         }
       
-
+ puts(ch[count]);
         count++;
         (*now)++;
     }
-
 
 
 
@@ -72,7 +71,7 @@ int main(void){
    int uniquewordCount=0,wordCount=0,i;
    char ch[height][width];
    int instances[height];
-   FILE *rFile = fopen("test6.txt", "r");
+   FILE *rFile = fopen("test3.txt", "r");
    uniquewordCount += countWords(rFile,&wordCount,ch,instances);
 
 
